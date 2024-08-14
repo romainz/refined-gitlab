@@ -1,13 +1,13 @@
 {
-  "manifest_version": 2,
-  "name": "Refined Gitlab By Canal+",
-  "version": "1.10.0",
+  "manifest_version": 3,
+  "name": "Refined Gitlab By Romain",
+  "version": "0.9",
   "homepage_url": "https://github.com/PaulRosset/refined-gitlab-canal",
   "description": "Add useful features to the Gitlab interface by Canal+",
   "icons": {
     "128": "icon.png"
   },
-  "browser_action": {
+  "action": {
     "default_icon": {
       "32": "icon.png"
     },
@@ -15,20 +15,30 @@
     "default_title": "Refined Gitlab"
   },
   "background": {
-    "scripts": ["background.js"],
-    "persistent": false
+    "service_worker": "background.js",
+    "type": "module"
   },
   "permissions": [
     "storage",
+    "scripting",
     "activeTab",
-    "contextMenus",
-    "https://gitlab.com/*"
+    "contextMenus"
   ],
-  "optional_permissions": ["http://*/*", "https://*/*"],
+  "host_permissions": [
+    "https://gitlab.com/*",
+    "https://gitlab.canal-plus.com/"
+  ],
+  "optional_host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
   "content_scripts": [
     {
       "run_at": "document_start",
-      "matches": ["https://gitlab.com/*"],
+      "matches": [
+        "https://gitlab.com/*",
+        "https://gitlab.canal-plus.com/"
+      ],
       "js": ["content.js"]
     }
   ]
