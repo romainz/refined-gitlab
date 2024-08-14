@@ -1,9 +1,9 @@
 {
-  "name": "refined-gitlab-canal",
-  "version": "1.10.0",
-  "description": "Refined gitlab Canal+",
+  "name": "refined-gitlab-canal-romain",
+  "version": "0.9",
+  "description": "Refined gitlab Romain",
   "main": "index.js",
-  "author": "Paul Rosset <paulrosset96@gmail.com>",
+  "author": "Romain ZANON <romain.zanon.dev@gmail.com>",
   "license": "MIT",
   "scripts": {
     "build": "webpack --mode=production",

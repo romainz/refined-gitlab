@@ -5,6 +5,12 @@ function sortWipDraftState() {
   const getOriginalRootNodeMR = select(".mr-list");
   const getAllMrEntry = select.all(".merge-request", getOriginalRootNodeMR);
   const sortedMR = getAllMrEntry
+    // sort without reviewer
+//    .map((mrEntry) => {
+//      const text = select(".gl-display-flex issuable-reviewers", mrEntry);
+//      return { text, mrEntry };
+//    }
+//    .map((elem) => elem.mrEntry);
     // sort wip/draft
     .map((mrEntry) => {
       const text = select(".merge-request-title-text a", mrEntry).text;
