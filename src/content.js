@@ -9,7 +9,19 @@ function sortMR() {
       const text = titleNode.getElementsByTagName("a")[0].text
       return { text, mrEntry };
     })
-    // sort by without/with reviewer
+    // sort notApproved/approved
+    .sort((mrA, mrB) => {
+      var approvedA = 1
+      if (! mrA.mrEntry.querySelectorAll("[data-testid='mr-appovals']").length) {
+        approvedA = 0;
+      }
+      var approvedB = 1
+      if (! mrB.mrEntry.querySelectorAll("[data-testid='mr-appovals']").length) {
+        approvedB = 0;
+      }
+      return approvedA - approvedB;
+    })
+    // sort by without/with reviewer notApproved/approved
     .sort((mrA, mrB) => {
       var reviewerA = 1;
       if (! mrA.mrEntry.getElementsByClassName("issuable-reviewers").length) {
