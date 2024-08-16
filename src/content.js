@@ -1,4 +1,17 @@
 
+function isDraft(mr) {
+  const titleNode = mr.getElementsByClassName("merge-request-title-text")[0]
+  const text = titleNode.getElementsByTagName("a")[0].text.toLowerCase()
+  return text.includes("draft") || text.includes("wip");
+}
+
+function isApproved(mr) {
+  if (! mr.querySelectorAll("[data-testid='mr-appovals']").length) {
+    return false;
+  } else {
+    return true;
+  }
+}
 
 function sortMR() {
   const getOriginalRootNodeMR = document.querySelector(".mr-list")
@@ -57,8 +70,21 @@ function sortMR() {
   }
 }
 
+
+function colorMR() {
+  const getAllMrEntry = document.querySelectorAll(".merge-request");
+  for (let mr of getAllMrEntry) {
+    if (isDraft(mr)) {
+      mr.style.opacity = "0.5";
+    } else if (isApproved(mr)) {
+      mr.style.backgroundColor = "#c3e6cd";
+    } e
+  }
+}
+
 async function main() {
   sortMR();
+  colorMR();
 }
 
 main();
