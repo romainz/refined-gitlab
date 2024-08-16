@@ -13,6 +13,14 @@ function isApproved(mr) {
   }
 }
 
+function isReviewing(mr) {
+  if (! mr.getElementsByClassName("issuable-reviewers").length) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
 function sortMR() {
   const getOriginalRootNodeMR = document.querySelector(".mr-list")
   const getAllMrEntry = document.querySelectorAll(".merge-request");
@@ -75,10 +83,18 @@ function colorMR() {
   const getAllMrEntry = document.querySelectorAll(".merge-request");
   for (let mr of getAllMrEntry) {
     if (isDraft(mr)) {
+      // transparent
       mr.style.opacity = "0.5";
     } else if (isApproved(mr)) {
-      mr.style.backgroundColor = "#c3e6cd";
-    } e
+      // green
+      mr.style.backgroundColor = 'rgba(195, 230, 205, 0.3)';
+    } else if (isReviewing(mr)) {
+      // orange
+      mr.style.backgroundColor = 'rgba(253, 172, 83, 0.2)';
+    } else {
+      // grey
+      mr.style.backgroundColor = 'rgba(232, 232, 232, 0.5)';
+    }
   }
 }
 
