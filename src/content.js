@@ -26,48 +26,48 @@ function sortMR() {
   const getAllMrEntry = document.querySelectorAll(".merge-request");
   const sortedMR = Array.from(getAllMrEntry)
     .map((mrEntry) => {
-      const titleNode = mrEntry.getElementsByClassName("merge-request-title-text")[0]
-      const text = titleNode.getElementsByTagName("a")[0].text
-      return { text, mrEntry };
+      const isDraftMr = isDraft(mrEntry)
+      const isApprovedMr = isApproved(mrEntry)
+      const isReviewingMr = isReviewing(mrEntry)
+      return { isDraftMr, isApprovedMr, isReviewingMr, mrEntry };
     })
     // sort notApproved/approved
     .sort((mrA, mrB) => {
-      var approvedA = 1
-      if (! mrA.mrEntry.querySelectorAll("[data-testid='mr-appovals']").length) {
-        approvedA = 0;
+      var approvedA = 0;
+      if (mrA.isApprovedMr) {
+        approvedA = 1;
       }
-      var approvedB = 1
-      if (! mrB.mrEntry.querySelectorAll("[data-testid='mr-appovals']").length) {
-        approvedB = 0;
+      var approvedB = 0;
+      if (mrB.isApprovedMr) {
+        approvedB = 1;
       }
       return approvedA - approvedB;
     })
-    // sort by without/with reviewer notApproved/approved
+    // sort by without/with reviewer
     .sort((mrA, mrB) => {
-      var reviewerA = 1;
-      if (! mrA.mrEntry.getElementsByClassName("issuable-reviewers").length) {
-        reviewerA = 0;
+      var reviewerA = 0;
+      if (mrA.isReviewingMr) {
+        isReviewingA = 1;
       }
-      var reviewerB = 1;
-      if (! mrB.mrEntry.getElementsByClassName("issuable-reviewers").length) {
-        reviewerB = 0;
+      var isReviewingB = 0;
+      if (mrB.isReviewingMr) {
+        isReviewingB = 1;
       }
-      return reviewerA - reviewerB;
+      return isReviewingA - isReviewingB;
     })
     // sort by WIP/Draft
     .sort((mrA, mrB) => {
-      const isDraftA = mrA.text.indexOf("Draft");
-      const isDraftA2 = mrA.text.indexOf("draft");
-      const isWipA = mrA.text.indexOf("WIP");
-      const isWipA2 = mrA.text.indexOf("Wip");
-      const isDraftB = mrB.text.indexOf("Draft");
-      const isDraftB2 = mrB.text.indexOf("draft");
-      const isWipB = mrB.text.indexOf("WIP");
-      const isWipB2 = mrB.text.indexOf("Wip");
-
-      return (isDraftA + isDraftA2 + isWipA + isWipA2) - (isDraftB + isDraftB2 + isWipB + isWipB2);
+      var isDraftA = 0;
+      if (mrA.isDraftMr) {
+        isDraftA = 1;
+      }
+      var isDraftB = 0;
+      if (mrB.isDraftMr) {
+        isDraftB = 1;
+      }
+      return isDraftA - isDraftB;
     })
-    .map((elem) => elem.mrEntry);
+    .map((mr) => mr.mrEntry);
   // Remove all previous MR displayed
   for (let mrEntry of getAllMrEntry) {
     mrEntry.remove();
