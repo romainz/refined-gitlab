@@ -45,7 +45,7 @@ function sortMR() {
     })
     // sort by without/with reviewer
     .sort((mrA, mrB) => {
-      var reviewerA = 0;
+      var isReviewingA = 0;
       if (mrA.isReviewingMr) {
         isReviewingA = 1;
       }
@@ -95,8 +95,46 @@ function colorMR() {
       // grey
       mr.style.backgroundColor = 'rgba(232, 232, 232, 0.5)';
     }
+    if (isReviewing(mr)) {
+      // add reviewer label
+      createReviewerLabel(mr);
+    }
   }
 }
+
+// Handle labels
+function createReviewerLabel(mr) {
+  var labelsGroup = mr.querySelectorAll("[aria-label='Labels']");
+  if (! labelsGroup.length) {
+    // create the labels group
+    mr.querySelectorAll("[aria-label='Labels']");
+    labelsGroup = document.createElement("div");
+    labelsGroup.setAttribute('aria-label', 'Labels');
+    labelsGroup.setAttribute('class', 'gl-mt-1 gl-display-flex gl-flex-wrap gl-gap-2');
+    labelsGroup.setAttribute('role', 'group');
+    // add the labels group
+    const issuableInfo = mr.getElementsByClassName("issuable-info")[0];
+    issuableInfo.appendChild(labelsGroup);
+  } else {
+    labelsGroup = labelsGroup[0]
+  }
+  // add the reviewer label
+  const span1 = document.createElement("span");
+  span1.setAttribute('class', 'gl-label gl-label-sm');
+  const span2 = document.createElement("span");
+  span2.setAttribute('class', 'gl-label-text gl-label-text-light');
+  span2.setAttribute('style', 'background-color: #009966');
+  // get reviewer name
+  const reviewers = mr.getElementsByClassName("issuable-reviewers")[0].getElementsByClassName("author-link")[0]
+  const reviewerName = reviewers.getAttribute("href");
+  span2.textContent = reviewerName.replace("/", "");
+  span1.appendChild(span2);
+  labelsGroup.appendChild(span1);
+}
+
+// <span class="gl-label gl-label-sm">
+// <span class="gl-label-text gl-label-text-light" style="background-color: #ff0000">DONT-MERGE</span></span>
+
 
 async function main() {
   sortMR();
