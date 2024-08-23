@@ -95,6 +95,8 @@ function colorMR() {
       // grey
       mr.style.backgroundColor = 'rgba(232, 232, 232, 0.5)';
     }
+    // add P0 label
+    addP0Label(mr);
     if (isReviewing(mr)) {
       // add reviewer label
       createReviewerLabel(mr);
@@ -103,7 +105,7 @@ function colorMR() {
 }
 
 // Handle labels
-function createReviewerLabel(mr) {
+function getLabelsGroup(mr) {
   var labelsGroup = mr.querySelectorAll("[aria-label='Labels']");
   if (! labelsGroup.length) {
     // create the labels group
@@ -116,27 +118,43 @@ function createReviewerLabel(mr) {
     const issuableInfo = mr.getElementsByClassName("issuable-info")[0];
     issuableInfo.appendChild(labelsGroup);
   } else {
-    labelsGroup = labelsGroup[0]
+    labelsGroup = labelsGroup[0];
   }
+  return labelsGroup;
+}
+
+function createLabel(group, text, backgroundColor) {
+  const span1 = document.createElement("span");
+  span1.setAttribute('class', 'gl-label gl-label-sm');
+  const span2 = document.createElement("span");
+  span2.setAttribute('class', 'gl-label-text gl-label-text-light');
+  span2.setAttribute('style', 'background-color: ' + backgroundColor);
+  span2.textContent = text;
+  span1.appendChild(span2);
+  group.appendChild(span1);
+}
+
+function createReviewerLabel(mr) {
+  var labelsGroup = getLabelsGroup(mr);
   // get reviewer name
-  const reviewers = mr.getElementsByClassName("issuable-reviewers")[0].getElementsByClassName("author-link")
+  const reviewers = mr.getElementsByClassName("issuable-reviewers")[0].getElementsByClassName("author-link");
   for (let reviewer of reviewers) {
     // add the reviewer label
-    const span1 = document.createElement("span");
-    span1.setAttribute('class', 'gl-label gl-label-sm');
-    const span2 = document.createElement("span");
-    span2.setAttribute('class', 'gl-label-text gl-label-text-light');
-    span2.setAttribute('style', 'background-color: #009966');
-    const reviewerName = reviewer.getAttribute("href");
-    span2.textContent = reviewerName.replace("/", "");
-    span1.appendChild(span2);
-    labelsGroup.appendChild(span1);
+    const reviewerName = reviewer.getAttribute("href").replace("/", "");
+    createLabel(labelsGroup, reviewerName, "#009966");
   }
 }
 
-// <span class="gl-label gl-label-sm">
-// <span class="gl-label-text gl-label-text-light" style="background-color: #ff0000">DONT-MERGE</span></span>
-
+function addP0Label(mr) {
+  const branches = mr.getElementsByClassName("ref-name")
+  if (branches.length > 0) {
+    branchName = branches[0].text.replace(" ", "").replace("-", "").replace("\n", "")
+    if (branchName.startsWith("hotfix") || branchName.startsWith("release")) {
+      var labelsGroup = getLabelsGroup(mr);
+      createLabel(labelsGroup, "P0", "#FF0000");
+    }
+  }
+}
 
 async function main() {
   sortMR();
