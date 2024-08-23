@@ -118,18 +118,20 @@ function createReviewerLabel(mr) {
   } else {
     labelsGroup = labelsGroup[0]
   }
-  // add the reviewer label
-  const span1 = document.createElement("span");
-  span1.setAttribute('class', 'gl-label gl-label-sm');
-  const span2 = document.createElement("span");
-  span2.setAttribute('class', 'gl-label-text gl-label-text-light');
-  span2.setAttribute('style', 'background-color: #009966');
   // get reviewer name
-  const reviewers = mr.getElementsByClassName("issuable-reviewers")[0].getElementsByClassName("author-link")[0]
-  const reviewerName = reviewers.getAttribute("href");
-  span2.textContent = reviewerName.replace("/", "");
-  span1.appendChild(span2);
-  labelsGroup.appendChild(span1);
+  const reviewers = mr.getElementsByClassName("issuable-reviewers")[0].getElementsByClassName("author-link")
+  for (let reviewer of reviewers) {
+    // add the reviewer label
+    const span1 = document.createElement("span");
+    span1.setAttribute('class', 'gl-label gl-label-sm');
+    const span2 = document.createElement("span");
+    span2.setAttribute('class', 'gl-label-text gl-label-text-light');
+    span2.setAttribute('style', 'background-color: #009966');
+    const reviewerName = reviewer.getAttribute("href");
+    span2.textContent = reviewerName.replace("/", "");
+    span1.appendChild(span2);
+    labelsGroup.appendChild(span1);
+  }
 }
 
 // <span class="gl-label gl-label-sm">
