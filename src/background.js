@@ -6,7 +6,8 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     console.log("tab url start with chrome://")
     return undefined;
   }
-  if (tab.active && changeInfo.status === 'complete') {
+  // only tab of opened MR
+  if ((!tab.url?.includes("?") || tab.url?.includes("state=opened")) && tab.active && changeInfo.status === 'complete') {
     chrome.scripting.executeScript({
       target: {tabId: tabId},
       files: ['./content.js']
