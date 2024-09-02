@@ -1,9 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Refined Gitlab By Romain",
+  "name": "Beautify Gitlab MR",
   "version": "0.9",
-  "homepage_url": "https://github.com/PaulRosset/refined-gitlab-canal",
-  "description": "Add useful features to the Gitlab interface by Canal+",
+  "description": "Add useful features to the Gitlab interface",
   "icons": {
     "128": "icon.png"
   },
@@ -12,7 +11,7 @@
       "32": "icon.png"
     },
     "default_popup": "options.html",
-    "default_title": "Refined Gitlab"
+    "default_title": "Beautify Gitlab MR"
   },
   "background": {
     "service_worker": "background.js"
