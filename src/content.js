@@ -78,10 +78,15 @@ function sortMR() {
   }
 }
 
+function getCurrentUser() {
+  return document.getElementsByClassName("js-current-user")[0].getElementsByClassName("dropdown-light-content")[0].text.replace(" ", "").replace("@", "")
+}
 
-function colorMR() {
+
+function browseMR() {
   const getAllMrEntry = document.querySelectorAll(".merge-request");
   for (let mr of getAllMrEntry) {
+    // color background MR
     if (isDraft(mr)) {
       // transparent
       mr.style.opacity = "0.5";
@@ -95,10 +100,12 @@ function colorMR() {
       // grey
       mr.style.backgroundColor = 'rgba(232, 232, 232, 0.5)';
     }
+
     // add P0 label
     addP0Label(mr);
+
+    // add reviewer label
     if (isReviewing(mr)) {
-      // add reviewer label
       createReviewerLabel(mr);
     }
   }
@@ -141,7 +148,8 @@ function createReviewerLabel(mr) {
   for (let reviewer of reviewers) {
     // add the reviewer label
     const reviewerName = reviewer.getAttribute("href").replace("/", "");
-    createLabel(labelsGroup, reviewerName, "#009966");
+    const labelHtml = "<span class=\"gl-label gl-label-sm\"><a class=\"gl-link gl-label-link\" href=\"/dce-front/android/mycanal/-/merge_requests?reviewer_username=" + reviewerName +"\"><span class=\"gl-label-text gl-label-text-light\" data-container=\"body\" data-html=\"true\" style=\"background-color: #009966\">" + reviewerName + "</span></a></span>"
+    labelsGroup.insertAdjacentHTML("beforeend", labelHtml)
   }
 }
 
@@ -158,7 +166,7 @@ function addP0Label(mr) {
 
 async function main() {
   sortMR();
-  colorMR();
+  browseMR();
 }
 
 main();

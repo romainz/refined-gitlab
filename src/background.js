@@ -7,12 +7,12 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     return undefined;
   }
   // only tab of opened MR
-  if ((!tab.url?.includes("?") || tab.url?.includes("state=opened")) && tab.active && changeInfo.status === 'complete') {
+  if ((!tab.url?.includes("state=") || tab.url?.includes("state=opened")) && tab.active && changeInfo.status === 'complete') {
     chrome.scripting.executeScript({
       target: {tabId: tabId},
       files: ['./content.js']
     })
-    .then(() => console.log("Scripts Loaded for Refined Gitlab"));
+    .then(() => console.log("Scripts Loaded"));
   }
 })
 
