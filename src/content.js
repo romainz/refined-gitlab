@@ -85,6 +85,9 @@ function getCurrentUser() {
 
 function browseMR() {
   const getAllMrEntry = document.querySelectorAll(".merge-request");
+  var approved = 0
+  var inReview = 0
+  var unassigned = 0
   for (let mr of getAllMrEntry) {
     // color background MR
     if (isDraft(mr)) {
@@ -93,12 +96,15 @@ function browseMR() {
     } else if (isApproved(mr)) {
       // green
       mr.style.backgroundColor = 'rgba(195, 230, 205, 0.3)';
+      approved = approved + 1
     } else if (isReviewing(mr)) {
       // orange
       mr.style.backgroundColor = 'rgba(253, 172, 83, 0.2)';
+      inReview = inReview + 1
     } else {
       // grey
       mr.style.backgroundColor = 'rgba(232, 232, 232, 0.5)';
+      unassigned = unassigned + 1
     }
 
     // add P0 label
@@ -109,6 +115,8 @@ function browseMR() {
       createReviewerLabel(mr);
     }
   }
+
+  addFilters(getAllMrEntry.length, unassigned, inReview, approved);
 }
 
 // Handle labels
@@ -141,6 +149,11 @@ function createLabel(group, text, backgroundColor) {
   group.appendChild(span1);
 }
 
+function createClickableLabel(group, text, backgroundColor, urlParams, margin) {
+  const labelHtml = "<span class=\"gl-label gl-label-sm\" style=\"margin:" + margin + "px\"><a class=\"gl-link gl-label-link\" href=\"/dce-front/android/mycanal/-/merge_requests?" + urlParams +"\"><span class=\"gl-label-text gl-label-text-light\" data-container=\"body\" data-html=\"true\" style=\"background-color:"+ backgroundColor + "\">" + text + "</span></a></span>"
+  group.insertAdjacentHTML("beforeend", labelHtml)
+}
+
 function createReviewerLabel(mr) {
   var labelsGroup = getLabelsGroup(mr);
   // get reviewer name
@@ -148,8 +161,8 @@ function createReviewerLabel(mr) {
   for (let reviewer of reviewers) {
     // add the reviewer label
     const reviewerName = reviewer.getAttribute("href").replace("/", "");
-    const labelHtml = "<span class=\"gl-label gl-label-sm\"><a class=\"gl-link gl-label-link\" href=\"/dce-front/android/mycanal/-/merge_requests?reviewer_username=" + reviewerName +"\"><span class=\"gl-label-text gl-label-text-light\" data-container=\"body\" data-html=\"true\" style=\"background-color: #009966\">" + reviewerName + "</span></a></span>"
-    labelsGroup.insertAdjacentHTML("beforeend", labelHtml)
+    const urlParams = "reviewer_username=" + reviewerName;
+    createClickableLabel(labelsGroup, reviewerName, "#009966", urlParams, 0);
   }
 }
 
@@ -162,6 +175,17 @@ function addP0Label(mr) {
       createLabel(labelsGroup, "P0", "#FF0000");
     }
   }
+}
+
+function addFilters(all, unassigned, inReview, approved) {
+  const filtersGroup = document.getElementsByClassName("issues-filters")[0]
+  const margin = "5"
+
+  // All
+  createClickableLabel(filtersGroup, "All (" + all + ")", "#A9A9A9", "", margin);
+  createClickableLabel(filtersGroup, "Unassigned (" + unassigned + ")", "rgba(208, 208, 208, 1)", "reviewer_id=None&draft=no", margin);
+  createClickableLabel(filtersGroup, "In review (" + inReview + ")", "rgba(253, 172, 83, 1)", "reviewer_id=Any&draft=no&approved_by_usernames[]=None", margin);
+  createClickableLabel(filtersGroup, "Approved (" + approved + ")", "#A0DAA9", "approved_by_usernames[]=Any", margin);
 }
 
 async function main() {
