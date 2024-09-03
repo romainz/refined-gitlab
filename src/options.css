@@ -1,7 +1,187 @@
-.disableFeature {
-  height: 30px;
+body {
+  background-color: #333238;
+  font-family: 'Open Sans', sans-serif;
 }
 
-.logo-gitlab {
-  height: 3rem;
+.popup {
+  width: 750px;
+  min-height: 379px;
+  padding: 8px;
+}
+
+header {
+  margin-bottom: .75rem;
+}
+
+header img {
+  height: 1rem;
+}
+
+section:not(:last-child) {
+  margin-bottom: 1.5rem;
+}
+
+section h3 {
+  color: #f9f9f9;
+  font-weight: 700;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  margin: 0;
+  margin-bottom: .25rem;
+}
+
+input {
+  border: solid 1px rgb(75 85 99);
+  background-color: rgb(55 65 81);
+  margin: 0;
+  appearance: none;
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+}
+
+.features > div.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.features > div.header > div {
+  display: flex;
+  gap: .75rem;
+}
+
+.features > div.header button {
+  display: flex;
+  min-width: 5.5rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.75rem;
+  color: white;
+  text-align: center;
+  font-weight: 500;
+  font-size: .75rem;
+  line-height: 1rem;
+  border:none;
+  border-radius: 0.5rem;
+  background-color: #1f75cb;
+  appearance: none;
+  cursor: pointer;
+  transition: background-color 100ms linear;
+}
+
+.features > div.header button:hover {
+  background-color: #1068bf;
+}
+
+.features > div.header button#refresh {
+  transition-property: opacity;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.features > div:not(.header) {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .75rem 1.75rem;
+}
+
+.feature {
+  display: flex;
+}
+
+.feature > .checkbox {
+  display: flex;
+  align-items: center;
+  height: 1.25rem;
+}
+
+.feature > .checkbox input {
+  height: 1rem;
+  width: 1rem;
+  border-radius: .25rem;
+  color: #1f75cb;
+}
+
+.feature > .checkbox input:checked {
+  background-color: currentColor;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  border-color: transparent;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 16 16' fill='%23fff' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.207 4.793a1 1 0 0 1 0 1.414l-5 5a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L6.5 9.086l4.293-4.293a1 1 0 0 1 1.414 0z'/%3E%3C/svg%3E");
+}
+
+.feature > label {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  margin-left: .5rem;
+  font-size: .875rem;
+  line-height: 1.25rem;
+}
+
+.feature > label h4 {
+  font-weight: 500;
+  font-size: .875rem;
+  line-height: 1.25rem;
+  color: #d4d4d4;
+  margin: 0;
+}
+
+.feature > label p {
+  font-weight: 400;
+  font-size: .75rem;
+  line-height: 1rem;
+  margin: 0;
+  color: #d4d4d48a;
+}
+
+.token h3 {
+  margin-bottom: .75rem;
+}
+
+.token label {
+  display: none;
+}
+
+.token input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.625rem;
+  margin: 0;
+  margin-bottom: .5rem;
+  border-radius: .5rem;
+  color: #f9f9f9;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-family: inherit;
+}
+
+.token input::placeholder {
+  color: #9ca3af;
+}
+
+.help {
+  font-weight: 400;
+  font-size: .75rem;
+  line-height: 1rem;
+  margin: 0;
+  color: #d4d4d48a;
+}
+
+.help a {
+  color: #d4d4d4;
+  text-decoration: inherit;
+  text-decoration-line: underline;
+}
+
+.help a:hover {
+  text-decoration-line: none;
+}
+
+.features .help {
+  margin-bottom: .75rem;
 }

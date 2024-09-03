@@ -1,24 +1,139 @@
 <!DOCTYPE html>
-<meta charset="utf-8" />
-<title>Refined GitLab options</title>
-<link rel="stylesheet" type="text/css" media="screen" href="options.css" />
-<form id="options-form">
-  <h3><img alt="logo-gitlab" src="./gitlab-logo.png" class="logo-gitlab"/></h3>
-  <p>
-    <label>
-      <strong>Disable feature by name</strong>
-      <p>You can disable feature one by one, for more information go <a href="https://github.com/PaulRosset/refined-gitlab-canal#disable-features" target="_blank">Here!</a></p>
-      <input name="disableFeature" class="disableFeature"></input>
-    </label>
-  </p>
-  <p>
-    <label>
-      <strong>Personal token</strong>
-      <input name="personalToken" spellcheck="false" autocomplete="off" size="20" maxlength="20"></input>
-    </label>
-    </p>
-    <p>
-          If you're a Gitlab Enterprise user, visit your Gitlab Enterprise site, right-click on <a href="https://user-images.githubusercontent.com/1402241/32874388-e0c64150-cacc-11e7-9a50-eae3727fd3c2.png" target="_blank">Refined Gitlab's icon in the toolbar</a> and select <strong>Enable Refined Gitlab on this domain</strong>.
-    </p>
-    </form>
-<script src="options.js"></script>
+<head>
+  <meta charset="utf-8" />
+  <title>Refined GitLab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" type="text/css" media="screen" href="options.css" />
+</head>
+<body>
+  <div class="popup">
+    <header>
+      <img alt="logo-gitlab" src="./gitlab-logo.png" />
+    </header>
+
+    <main>
+      <form id="options-form">
+        <section class="features">
+          <div class="header">
+            <h3>Feature Selection</h3>
+            <div>
+              <button type="button" id="refresh" style="opacity:0">Refresh page</button>
+              <button type="button" id="checkAll">Check all</button>
+              <input hidden type="checkbox" id="allChecked" />
+            </div>
+          </div>
+          <p class="help">The page needs to be refreshed for the changes to be applied.</p>
+          <div>
+            <div class="feature">
+              <div class="checkbox">
+                <input type="checkbox" id="addFavoriteSearches" name="addFavoriteSearches">
+              </div>
+              <label for="addFavoriteSearches">
+                <h4>Add Favorite Searches</h4>
+                <p>On the Merge Request / Issue list, add some saved searches in the dropdown left of the searchbar.</p>
+              </label>
+            </div>
+            <input hidden type="checkbox" id="copyMRIssueNumber" name="copyMRIssueNumber" checked>
+            <div class="feature">
+              <div class="checkbox">
+                <input type="checkbox" id="openInDemoButton" name="openInDemoButton">
+              </div>
+              <label for="openInDemoButton">
+                <h4>Add button to open branch in OnePlayer Demo</h4>
+                <p>On a specific MR page, adds a button next to the branch name to open the OnePlayer Demo with the current branch.</p>
+              </label>
+            </div>
+            <div class="feature">
+              <div class="checkbox">
+                <input type="checkbox" id="dimDraftMR" name="dimDraftMR">
+              </div>
+              <label for="dimDraftMR">
+                <h4>Dim Draft MRs</h4>
+                <p>On the Merge Request list, display the Draft MRs at a reduced opacity.</p>
+              </label>
+            </div>
+            <div class="feature">
+              <div class="checkbox">
+                <input type="checkbox" id="prettierOnMdFields" name="prettierOnMdFields">
+              </div>
+              <label for="prettierOnMdFields">
+                <h4>Add Prettier tool on Markdown fields</h4>
+                <p>On a specific MR / Issue page, add a toolbar button to format the description using Prettier.</p>
+              </label>
+            </div>
+            <div class="feature">
+              <div class="checkbox">
+                <input type="checkbox" id="upgradeMRStats" name="upgradeMRStats">
+              </div>
+              <label for="upgradeMRStats">
+                <h4>Display additional info on MRs</h4>
+                <p>On the Merge Request list, add the avatar of people who upvoted the MR, the number of file changes, and
+                  the number of resolved and total threads.</p>
+              </label>
+            </div>
+            <div class="feature">
+              <div class="checkbox">
+                <input type="checkbox" id="displayBundleSizes" name="displayBundleSizes">
+              </div>
+              <label for="displayBundleSizes">
+                <h4>Display bundle sizes</h4>
+                <p>On a specific MR page, in the pipeline info panel, display the bundle size and the differential of
+                  the current build on the CI when the target branch is master.</p>
+              </label>
+            </div>
+            <div class="feature">
+              <div class="checkbox">
+                <input type="checkbox" id="sideMRAuthor" name="sideMRAuthor">
+              </div>
+              <label for="sideMRAuthor">
+                <h4>Display MR author on the left side</h4>
+                <p>On the Merge Request list, display the author of the MR on the left side.</p>
+              </label>
+            </div>
+            <div class="feature">
+              <div class="checkbox">
+                <input type="checkbox" id="displayThumbAuthors" name="displayThumbAuthors">
+              </div>
+              <label for="displayThumbAuthors">
+                <h4>Display MR upvoters</h4>
+                <p>On a specific MR page, display the names of the people that have added a thumb to the MR, on top of the button.</p>
+              </label>
+            </div>
+            <div class="feature">
+              <div class="checkbox">
+                <input type="checkbox" id="customMRSort" name="customMRSort">
+              </div>
+              <label for="customMRSort">
+                <h4>Sort MRs with custom order</h4>
+                <p>On the Merge Request list, sort the P0 and P1 MRs putting them on top and StandBy & Draft MRs on the bottom.</p>
+              </label>
+            </div>
+            <div class="feature">
+              <div class="checkbox">
+                <input type="checkbox"  id="replaceMrUrl"  name="replaceMrUrl">
+              </div>
+              <label for="replaceMrUrl">
+                <h4>Replace MR URL</h4>
+                <p>On a specific MR page, replace the ${source_branch_name///} variable in the links of the description.</p>
+              </label>
+            </div>
+        </section>
+
+        <section class="token">
+          <h3>Personal access token</h3>
+          <div>
+            <label for="personalToken">Personal API token</label>
+            <input id="personalToken" name="personalToken" spellcheck="false" autocomplete="off" maxlength="20"
+              placeholder="MyAccessToken">
+            <p class="help">You need to create a Personal access token on <a href="https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html" target="_blank">GitLab</a> to authenticate with the GitLab API.</p>
+          </div>
+        </section>
+      </form>
+    </main>
+  </div>
+</body>
+<script src="options.js" type="module"></script>
