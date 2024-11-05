@@ -21,6 +21,14 @@ function isReviewing(mr) {
   }
 }
 
+function isAuthorRenovabot(mr) {
+  if (mr.getElementsByClassName("author")[0].textContent == "renovabot") {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 function sortMR() {
   const getOriginalRootNodeMR = document.querySelector(".mr-list")
   const getAllMrEntry = document.querySelectorAll(".merge-request");
@@ -54,6 +62,18 @@ function sortMR() {
         isReviewingB = 1;
       }
       return isReviewingA - isReviewingB;
+    })
+    // sort by renavatebot
+    .sort((mrA, mrB) => {
+      var isRenovabotA = 0;
+      if (isAuthorRenovabot(mrA.mrEntry)) {
+        isRenovabotA = 1;
+      }
+      var isRenovabotB = 0;
+      if (isAuthorRenovabot(mrB.mrEntry)) {
+        isRenovabotB = 1;
+      }
+      return isRenovabotA - isRenovabotB;
     })
     // sort by WIP/Draft
     .sort((mrA, mrB) => {
