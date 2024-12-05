@@ -9,7 +9,8 @@ function isApproved(mr) {
   if (! mr.querySelectorAll("[data-testid='mr-appovals']").length) {
     return false;
   } else {
-    return true;
+    const approversNode = mr.querySelectorAll("[data-testid='mr-appovals']")[0]
+    return approversNode.classList.contains("badge-success")
   }
 }
 
