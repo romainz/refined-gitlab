@@ -2,7 +2,7 @@
 function isDraft(mr) {
   const titleNode = mr.getElementsByClassName("merge-request-title-text")[0]
   const text = titleNode.getElementsByTagName("a")[0].text.toLowerCase()
-  return text.includes("draft") || text.includes("wip");
+  return text.startsWith("draft") || text.startsWith("wip");
 }
 
 function isApproved(mr) {
@@ -123,7 +123,7 @@ function isCurrentUserMr(mr) {
 }
 
 function getCurrentUser() {
-  return document.getElementsByClassName("js-current-user")[0].getElementsByClassName("dropdown-light-content")[0].textContent.trim().replace("@", "")
+  return document.getElementsByClassName("js-current-user")[0].getElementsByClassName("js-dropdown-light-content")[0].textContent.trim().replace("@", "")
 }
 
 function getAllMr() {
