@@ -1,8 +1,7 @@
 
 function isDraft(mr) {
-  const titleNode = mr.getElementsByClassName("merge-request-title-text")[0]
-  const text = titleNode.getElementsByTagName("a")[0].text.toLowerCase()
-  return text.startsWith("draft") || text.startsWith("wip");
+  const title = mr.getAttribute("data-qa-issuable-title").toLowerCase()
+  return title.startsWith("draft") || title.startsWith("wip");
 }
 
 function isApproved(mr) {
@@ -31,7 +30,7 @@ function isAuthorRenovabot(mr) {
 }
 
 function sortMR() {
-  const getOriginalRootNodeMR = document.querySelector(".mr-list")
+  const getOriginalRootNodeMR = getRootNodeMrList()
   const getAllMrEntry = document.querySelectorAll(".merge-request");
   const sortedMR = Array.from(getAllMrEntry)
     .map((mrEntry) => {
@@ -123,13 +122,12 @@ function isCurrentUserMr(mr) {
 }
 
 function getCurrentUser() {
-  return document.getElementsByClassName("js-current-user")[0].getElementsByClassName("js-dropdown-light-content")[0].textContent.trim().replace("@", "")
+  return document.querySelectorAll("[data-testid='current-user']")[0].getElementsByClassName("gl-avatar-labeled-sublabel")[0].textContent.trim().replace("@", "")
 }
 
 function getAllMr() {
   return document.querySelectorAll(".merge-request");
 }
-
 
 function browseMR() {
   const getAllMrEntry = getAllMr();
@@ -169,6 +167,7 @@ function browseMR() {
     }
   }
 
+  clearPreviousFilters()
   addFilters(getAllMrEntry.length, unassigned, inReview, approved, currentUserMR);
 }
 
@@ -202,9 +201,9 @@ function createLabel(group, text, backgroundColor) {
   group.appendChild(span1);
 }
 
-function createClickableLabel(group, text, backgroundColor, urlParams, margin) {
-  const labelHtml = "<span class=\"gl-label gl-label-sm\" style=\"margin:" + margin + "px\"><a class=\"gl-link gl-label-link\" href=\"/dce-front/android/mycanal/-/merge_requests?" + urlParams +"\"><span class=\"gl-label-text gl-label-text-light\" data-container=\"body\" data-html=\"true\" style=\"background-color:"+ backgroundColor + "\">" + text + "</span></a></span>"
-  group.insertAdjacentHTML("beforeend", labelHtml)
+function createClickableLabel(group, position, text, backgroundColor, urlParams, margin) {
+  const labelHtml = "<span class=\"gl-label gl-label-sm custom-label\" style=\"margin:" + margin + "px\"><a class=\"gl-link gl-label-link\" href=\"/dce-front/android/mycanal/-/merge_requests?" + urlParams +"\"><span class=\"gl-label-text gl-label-text-light\" data-container=\"body\" data-html=\"true\" style=\"background-color:"+ backgroundColor + "\">" + text + "</span></a></span>"
+  group.insertAdjacentHTML(position, labelHtml)
 }
 
 function createReviewerLabel(mr) {
@@ -215,7 +214,7 @@ function createReviewerLabel(mr) {
     // add the reviewer label
     const reviewerName = reviewer.getAttribute("href").replace("/", "");
     const urlParams = "reviewer_username=" + reviewerName;
-    createClickableLabel(labelsGroup, reviewerName, "#009966", urlParams, 0);
+    createClickableLabel(labelsGroup, "beforeend", reviewerName, "#009966", urlParams, 0);
   }
 }
 
@@ -230,22 +229,36 @@ function addP0Label(mr) {
   }
 }
 
-function addFilters(all, unassigned, inReview, approved, currentUserMR) {
-  const filtersGroup = document.getElementsByClassName("issues-filters")[0]
-  const margin = "5"
+function getSearchFilterNode() {
+  return document.getElementsByClassName("vue-filtered-search-bar-container")[0]
+}
 
-  createClickableLabel(filtersGroup, "All (" + all + ")", "#A9A9A9", "", margin);
-  createClickableLabel(filtersGroup, "Unassigned (" + unassigned + ")", "rgba(208, 208, 208, 1)", "reviewer_id=None&draft=no", margin);
-  createClickableLabel(filtersGroup, "In review (" + inReview + ")", "rgba(253, 172, 83, 1)", "reviewer_id=Any&draft=no&approved_by_usernames[]=None", margin);
-  createClickableLabel(filtersGroup, "Approved (" + approved + ")", "#A0DAA9", "approved_by_usernames[]=Any", margin);
+function clearPreviousFilters() {
+  existingFilters = Array.from(document.getElementsByClassName("custom-label"))
+  for (let existingFilter of existingFilters) {
+    existingFilter.remove();
+  }
+}
+
+function addFilters(all, unassigned, inReview, approved, currentUserMR) {
+  const filtersGroup = getSearchFilterNode()
+  const margin = "5"
+  const filterPosition = "afterend"
+
 
   // add filter of the user
   const currentUserName = getCurrentUser();
-  const labelHtml = "<span class=\"gl-label gl-label-sm\" style=\"margin:" + margin + "px\"><a class=\"gl-link gl-label-link\"><span class=\"gl-label-text gl-label-text-light\" data-container=\"body\" data-html=\"true\" style=\"background-color:#A9A9A9\">" + currentUserName + " (" + currentUserMR + ")</span></a></span>"
-  filtersGroup.insertAdjacentHTML("beforeend", labelHtml)
-  filtersGroup.children[filtersGroup.childElementCount - 1].addEventListener("click", function() {
+  const labelHtml = "<span class=\"gl-label gl-label-sm custom-label user-filter\" style=\"margin:" + margin + "px\"><a class=\"gl-link gl-label-link\"><span class=\"gl-label-text gl-label-text-light\" data-container=\"body\" data-html=\"true\" style=\"background-color:#A9A9A9\">" + currentUserName + " (" + currentUserMR + ")</span></a></span>"
+  filtersGroup.insertAdjacentHTML(filterPosition, labelHtml)
+  document.getElementsByClassName("user-filter")[0].addEventListener("click", function() {
     displayCurrentUserMr();
   });
+
+  createClickableLabel(filtersGroup, filterPosition, "Approved (" + approved + ")", "#A0DAA9", "approved_by_usernames[]=Any", margin);
+  createClickableLabel(filtersGroup, filterPosition, "In review (" + inReview + ")", "rgba(253, 172, 83, 1)", "reviewer_id=Any&draft=no&approved_by_usernames[]=None", margin);
+  createClickableLabel(filtersGroup, filterPosition, "Unassigned (" + unassigned + ")", "rgba(208, 208, 208, 1)", "reviewer_id=None&draft=no", margin);
+  createClickableLabel(filtersGroup, filterPosition, "All (" + all + ")", "#A9A9A9", "", margin);
+
 }
 
 function displayCurrentUserMr() {
@@ -256,11 +269,15 @@ function displayCurrentUserMr() {
   for (let mr of allMr) {
     mr.remove();
   }
-  const originalRootNodeMR = document.querySelector(".mr-list")
+  const originalRootNodeMR = getRootNodeMrList()
   // Display current user mrs
   for (let mr of currentUserMRs) {
     originalRootNodeMR.appendChild(mr);
   }
+}
+
+function getRootNodeMrList() {
+  return document.querySelector(".content-list")
 }
 
 async function main() {
