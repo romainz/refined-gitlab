@@ -22,7 +22,7 @@ function isReviewing(mr) {
 }
 
 function isAuthorRenovabot(mr) {
-  if (mr.getElementsByClassName("author")[0].textContent == "renovabot") {
+  if (getAuthorName(mr) == "renovabot" || getAuthorName(mr) == "ghost") {
     return true;
   } else {
     return false;
@@ -101,7 +101,7 @@ function sortMR() {
 function isCurrentUserMr(mr) {
   const currentUserName = getCurrentUser()
   // check author
-  const author = mr.getElementsByClassName("author-link")[0].getAttribute("href").replace("/", "")
+  const author = getAuthorName(mr)
   var isUserMr = false;
   if (author == currentUserName) {
     isUserMr = true
@@ -119,6 +119,10 @@ function isCurrentUserMr(mr) {
     }
   }
   return isUserMr;
+}
+
+function getAuthorName(mr) {
+  return mr.getElementsByClassName("author-link")[0].getAttribute("href").replace("/", "")
 }
 
 function getCurrentUser() {
