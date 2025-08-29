@@ -32,7 +32,7 @@
   ],
   "content_scripts": [
     {
-      "run_at": "document_start",
+      "run_at": "document_end",
       "matches": [
         "https://gitlab.com/*",
         "https://gitlab.canal-plus.com/"
