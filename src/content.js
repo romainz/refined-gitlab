@@ -139,6 +139,8 @@ function browseMR() {
   var inReview = 0
   var unassigned = 0
   var currentUserMR = 0
+
+  clearPreviousFilters()
   for (let mr of getAllMrEntry) {
     // color background MR
     if (isDraft(mr)) {
@@ -171,7 +173,6 @@ function browseMR() {
     }
   }
 
-  clearPreviousFilters()
   addFilters(getAllMrEntry.length, unassigned, inReview, approved, currentUserMR);
 }
 
