@@ -5,11 +5,11 @@ function isDraft(mr) {
 }
 
 function isApproved(mr) {
-  if (! mr.querySelectorAll("[data-testid='mr-appovals']").length) {
+  if (! mr.querySelectorAll("[data-testid=\"mr-approvals\"]").length) {
     return false;
   } else {
-    const approversNode = mr.querySelectorAll("[data-testid='mr-appovals']")[0]
-    return approversNode.classList.contains("badge-success")
+    const approversNode = mr.querySelectorAll("[data-testid=\"mr-approvals\"]")[0]
+    return approversNode.classList.contains("badge-success") || approversNode.getElementsByClassName("badge-success").length > 0
   }
 }
 
